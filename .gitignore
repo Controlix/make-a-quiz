@@ -1,6 +1,6 @@
 # Python project
-web/venv
-web/__pycache__
+api/venv
+api/__pycache__
 
 # PyCharm
 */.idea
