@@ -1,20 +1,18 @@
 <template>
   <div id="app">
     <img alt="Quiz" src="./assets/Quiz.png">
-    <CreateQuiz></CreateQuiz>
-    <Participate></Participate>
+    <h1>Welcome to my quiz app!</h1>
+    <p>
+      <router-link to='/create'>Create a new quiz</router-link>
+      <br />
+      <router-link to='/play'>Play a quiz</router-link>
+    </p>
+    <router-view></router-view>
   </div>
 </template>
 
-<script>
-import CreateQuiz from './components/admin/Create.vue'
-import Participate from './components/play/Participate.vue'
-
-export default {
-  name: 'app',
-  components: {
-    CreateQuiz, Participate
-  }
+<script>export default {
+  name: 'app'
 }
 </script>
 
