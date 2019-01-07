@@ -8,8 +8,15 @@
       <button v-on:click="nameQuiz">Create</button>
     </span>
     <ol>
-      <li v-for="question in questions">{{question.q}} - {{question.a}}</li>
+      <li v-for="question in questions">{{question.text}} - {{question.answer}}</li>
     </ol>
+    <div>
+      <label for="question">Enter question:</label>
+      <input id="question" type="text" v-model="question.text">
+      <label for="answer">Enter answer:</label>
+      <input id="answer" type="text" v-model="question.answer">
+      <button v-on:click="addQuestion">Add</button>
+    </div>
   </div>
 </template>
 
@@ -19,23 +26,21 @@ export default {
   data() {
     return {
       name: "",
-      questions: [
-      {
-        q: "Who is Luke's father?",
-        a: "Darth Vader"
-      },
-      {
-        q: "What planet lies at your bottom?",
-        a: "Your anus"
-      }
-    ],
-      isNamed: false
+      isNamed: false,
+      questions: [],
+      question: {}
     }
   },
   methods: {
     nameQuiz() {
-      console.log("Create a new quiz named " + this.name);
       this.isNamed = true;
+    },
+    addQuestion() {
+      this.questions.push({
+        text: this.question.text,
+        answer: this.question.answer
+      });
+      this.question = {};
     }
   }
 }
