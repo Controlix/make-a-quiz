@@ -2,16 +2,25 @@
   <div id="app">
     <img alt="Quiz" src="./assets/Quiz.png">
     <h1>Welcome to my quiz app!</h1>
-    <p>
-      <router-link to='/create'>Create a new quiz</router-link>
-      <br />
-      <router-link to='/play'>Play a quiz</router-link>
-    </p>
+    <b-navbar type="dark" variant="info">
+      <b-navbar-nav>
+        <b-nav-item to='/create'>Create a new quiz</b-nav-item>
+        <b-nav-item to='/play'>Play a quiz</b-nav-item>
+      </b-navbar-nav>
+    </b-navbar>
     <router-view></router-view>
   </div>
 </template>
 
-<script>export default {
+<script>
+import Vue from 'vue'
+import BootstrapVue from 'bootstrap-vue'
+
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+Vue.use(BootstrapVue)
+
+export default {
   name: 'app'
 }
 </script>
