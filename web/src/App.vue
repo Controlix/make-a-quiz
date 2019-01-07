@@ -2,11 +2,15 @@
   <div id="app">
     <img alt="Quiz" src="./assets/Quiz.png">
     <h1>Welcome to my quiz app!</h1>
-    <b-navbar type="dark" variant="info">
-      <b-navbar-nav>
-        <b-nav-item to='/create'>Create a new quiz</b-nav-item>
-        <b-nav-item to='/play'>Play a quiz</b-nav-item>
-      </b-navbar-nav>
+    <b-navbar toggleable="md" type="dark" variant="success">
+      <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+      <b-navbar-brand href="#">Make a Quiz</b-navbar-brand>
+      <b-collapse is-nav id="nav_collapse">
+        <b-navbar-nav>
+          <b-nav-item to='/create'>Create a new quiz</b-nav-item>
+          <b-nav-item to='/play'>Play a quiz</b-nav-item>
+        </b-navbar-nav>
+      </b-collapse>
     </b-navbar>
     <router-view></router-view>
   </div>
