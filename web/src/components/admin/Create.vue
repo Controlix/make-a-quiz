@@ -7,11 +7,33 @@
       <input id="quizName" type="text" v-model="name">
       <button v-on:click="nameQuiz">Create</button>
     </span>
-    <b-list-group>
-      <b-list-group-item v-for="(question, index) in questions" :key="index">
-        {{index+1}} : {{question.text}} - {{question.answer}}
-      </b-list-group-item>
-    </b-list-group>
+    <b-table :items="questions" :fields="fields">
+      <template slot="index" slot-scope="data">
+        {{data.index + 1}}
+      </template>
+      <template slot="operations" slot-scope="cell">
+        <b-button-toolbar>
+          <b-button-group class="mx-1">
+            <b-button type="submit" variant="danger" v-on:click="removeQuestion(cell.item)">
+              <v-icon name="regular/trash-alt" scale="1.5"/>
+            </b-button>
+          </b-button-group>
+          <b-button-group class="mx-1">
+            <b-button type="submit" variant="warning">
+              <v-icon name="regular/edit" scale="1.5"/>
+            </b-button>
+          </b-button-group>
+          <b-button-group class="mx-1">
+            <b-button type="submit" variant="primary" v-if="cell.index > 0" v-on:click="moveUp(cell.index)">
+              <v-icon name="regular/caret-square-up" scale="1.5"/>
+            </b-button>
+            <b-button type="submit" variant="primary" v-if="cell.index < questions.length-1" v-on:click="moveDown(cell.index)">
+              <v-icon name="regular/caret-square-down" scale="1.5"/>
+            </b-button>
+          </b-button-group>
+        </b-button-toolbar>
+      </template>
+    </b-table>
     <div>
       <b-form @submit="addQuestion" inline>
         <label class="mr-sm-2" for="textInput">Question:</label>
@@ -45,7 +67,8 @@ export default {
       name: "",
       isNamed: false,
       questions: [],
-      question: {}
+      question: {},
+      fields: ["index", "text", "answer", "operations"]
     }
   },
   methods: {
@@ -58,6 +81,15 @@ export default {
         answer: this.question.answer
       });
       this.question = {};
+    },
+    removeQuestion(question) {
+      this.questions.splice(question, 1);
+    },
+    moveDown(index) {
+      this.questions[index] = this.questions.splice(index+1, 1, this.questions[index])[0];
+    },
+    moveUp(index) {
+      this.questions[index-1] = this.questions.splice(index, 1, this.questions[index-1])[0];
     }
   }
 }
