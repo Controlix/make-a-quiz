@@ -8,14 +8,30 @@
       <button v-on:click="nameQuiz">Create</button>
     </span>
     <ol>
-      <li v-for="question in questions">{{question.text}} - {{question.answer}}</li>
+      <li v-for="question in questions" v-bind:key="question">{{question.text}} - {{question.answer}}</li>
     </ol>
     <div>
-      <label for="question">Enter question:</label>
-      <input id="question" type="text" v-model="question.text">
-      <label for="answer">Enter answer:</label>
-      <input id="answer" type="text" v-model="question.answer">
-      <button v-on:click="addQuestion">Add</button>
+      <b-form @submit="addQuestion" inline>
+        <label class="mr-sm-2" for="textInput">Question:</label>
+        <b-form-input id="textInput"
+                      class="mb-2 mr-sm-2 mb-sm-0"
+                      type="text"
+                      v-model="question.text"
+                      required
+                      placeholder="Enter the question">
+        </b-form-input>
+        <b-form-input id="answerInput"
+                      class="mb-2 mr-sm-2 mb-sm-0"
+                      type="text"
+                      v-model="question.answer"
+                      required
+                      placeholder="Enter the answer">
+        </b-form-input>
+        <b-button type="submit" variant="primary">
+          Add
+          <span class="glyphicon glyphicon-envelope"></span>
+        </b-button>
+      </b-form>
     </div>
   </div>
 </template>
