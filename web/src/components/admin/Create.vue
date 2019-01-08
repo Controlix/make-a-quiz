@@ -7,9 +7,11 @@
       <input id="quizName" type="text" v-model="name">
       <button v-on:click="nameQuiz">Create</button>
     </span>
-    <ol>
-      <li v-for="question in questions" v-bind:key="question">{{question.text}} - {{question.answer}}</li>
-    </ol>
+    <b-list-group>
+      <b-list-group-item v-for="(question, index) in questions">
+        {{index+1}} : {{question.text}} - {{question.answer}}
+      </b-list-group-item>
+    </b-list-group>
     <div>
       <b-form @submit="addQuestion" inline>
         <label class="mr-sm-2" for="textInput">Question:</label>
