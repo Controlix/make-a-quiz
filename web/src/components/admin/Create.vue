@@ -38,9 +38,6 @@
 </template>
 
 <script>
-import 'vue-awesome/icons'
-import Icon from 'vue-awesome/components/Icon'
-
 export default {
   name: 'CreateQuiz',
   data() {
@@ -62,9 +59,6 @@ export default {
       });
       this.question = {};
     }
-  },
-  components: {
-    'v-icon': Icon
   }
 }
 </script>

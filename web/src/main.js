@@ -5,10 +5,13 @@ import App from './App.vue'
 import CreateQuiz from './components/admin/Create'
 import Participate from './components/play/Participate'
 
+import 'vue-awesome/icons'
+import Icon from 'vue-awesome/components/Icon'
 
 Vue.config.productionTip = false
 
 Vue.use(VueRouter)
+Vue.component('v-icon', Icon)
 
 new Vue({
   router: new VueRouter({
