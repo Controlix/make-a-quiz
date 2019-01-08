@@ -8,7 +8,7 @@
       <button v-on:click="nameQuiz">Create</button>
     </span>
     <b-list-group>
-      <b-list-group-item v-for="(question, index) in questions">
+      <b-list-group-item v-for="(question, index) in questions" :key="index">
         {{index+1}} : {{question.text}} - {{question.answer}}
       </b-list-group-item>
     </b-list-group>
@@ -29,9 +29,8 @@
                       required
                       placeholder="Enter the answer">
         </b-form-input>
-        <b-button type="submit" variant="primary">
-          Add
-          <span class="glyphicon glyphicon-envelope"></span>
+        <b-button type="submit" variant="success">
+          <v-icon name="regular/plus-square" scale="1.5"/>
         </b-button>
       </b-form>
     </div>
@@ -39,6 +38,9 @@
 </template>
 
 <script>
+import 'vue-awesome/icons'
+import Icon from 'vue-awesome/components/Icon'
+
 export default {
   name: 'CreateQuiz',
   data() {
@@ -60,6 +62,9 @@ export default {
       });
       this.question = {};
     }
+  },
+  components: {
+    'v-icon': Icon
   }
 }
 </script>
