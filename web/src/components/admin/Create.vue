@@ -11,15 +11,35 @@
       <template slot="index" slot-scope="data">
         {{data.index + 1}}
       </template>
+      <template slot="text" slot-scope="cell">
+        <span v-if="cell.index == indexToEdit">
+          <input type="text" v-model="question.text" />
+        </span>
+        <span v-else>
+          {{cell.item.text}}
+        </span>
+      </template>
       <template slot="operations" slot-scope="cell">
-        <b-button-toolbar>
+        <b-button-toolbar v-if="cell.index == indexToEdit">
+          <b-button-group class="mx-1">
+            <b-button type="submit" variant="success">
+              <v-icon name="regular/check-circle" scale="1.5"/>
+            </b-button>
+          </b-button-group>
+          <b-button-group class="mx-1">
+            <b-button type="submit" variant="danger" v-on:click="cancelEditQuestion">
+              <v-icon name="regular/times-circle" scale="1.5"/>
+            </b-button>
+          </b-button-group>
+        </b-button-toolbar>
+        <b-button-toolbar v-else>
           <b-button-group class="mx-1">
             <b-button type="submit" variant="danger" v-on:click="removeQuestion(cell.item)">
               <v-icon name="regular/trash-alt" scale="1.5"/>
             </b-button>
           </b-button-group>
           <b-button-group class="mx-1">
-            <b-button type="submit" variant="warning">
+            <b-button type="submit" variant="warning" v-on:click="editQuestion(cell.index)">
               <v-icon name="regular/edit" scale="1.5"/>
             </b-button>
           </b-button-group>
@@ -27,7 +47,7 @@
             <b-button type="submit" variant="primary" v-if="cell.index > 0" v-on:click="moveUp(cell.index)">
               <v-icon name="regular/caret-square-up" scale="1.5"/>
             </b-button>
-            <b-button type="submit" variant="primary" v-if="cell.index < questions.length-1" v-on:click="moveDown(cell.index)">
+            <b-button type="submit" variant="primary" :disabled="isLastRow(cell.index)" v-on:click="moveDown(cell.index)">
               <v-icon name="regular/caret-square-down" scale="1.5"/>
             </b-button>
           </b-button-group>
@@ -66,6 +86,7 @@ export default {
     return {
       name: "",
       isNamed: false,
+      indexToEdit: -1,
       questions: [],
       question: {},
       fields: ["index", "text", "answer", "operations"]
@@ -75,11 +96,22 @@ export default {
     nameQuiz() {
       this.isNamed = true;
     },
+    isLastRow(index) {
+      return index == this.questions.length-1;
+    },
     addQuestion() {
       this.questions.push({
         text: this.question.text,
         answer: this.question.answer
       });
+      this.question = {};
+    },
+    editQuestion(index) {
+      this.indexToEdit = index;
+      this.question = this.questions[index];
+    },
+    cancelEditQuestion() {
+      this.indexToEdit = -1;
       this.question = {};
     },
     removeQuestion(question) {
