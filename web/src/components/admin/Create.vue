@@ -13,44 +13,54 @@
       </template>
       <template slot="text" slot-scope="cell">
         <span v-if="cell.index == indexToEdit">
-          <input type="text" v-model="question.text" />
+          <input type="text" v-model="updatedQuestion.text" />
         </span>
         <span v-else>
           {{cell.item.text}}
         </span>
       </template>
+      <template slot="answer" slot-scope="cell">
+        <span v-if="cell.index == indexToEdit">
+          <input type="text" v-model="updatedQuestion.answer" />
+        </span>
+        <span v-else>
+          {{cell.item.answer}}
+        </span>
+      </template>
       <template slot="operations" slot-scope="cell">
-        <b-button-toolbar v-if="cell.index == indexToEdit">
+        <b-button-toolbar>
           <b-button-group class="mx-1">
-            <b-button type="submit" variant="success">
-              <v-icon name="regular/check-circle" scale="1.5"/>
-            </b-button>
-          </b-button-group>
-          <b-button-group class="mx-1">
-            <b-button type="submit" variant="danger" v-on:click="cancelEditQuestion">
-              <v-icon name="regular/times-circle" scale="1.5"/>
-            </b-button>
-          </b-button-group>
-        </b-button-toolbar>
-        <b-button-toolbar v-else>
-          <b-button-group class="mx-1">
-            <b-button type="submit" variant="danger" v-on:click="removeQuestion(cell.item)">
-              <v-icon name="regular/trash-alt" scale="1.5"/>
-            </b-button>
-          </b-button-group>
-          <b-button-group class="mx-1">
-            <b-button type="submit" variant="warning" v-on:click="editQuestion(cell.index)">
-              <v-icon name="regular/edit" scale="1.5"/>
-            </b-button>
-          </b-button-group>
-          <b-button-group class="mx-1">
-            <b-button type="submit" variant="primary" v-if="cell.index > 0" v-on:click="moveUp(cell.index)">
+            <b-button type="submit" variant="primary" :disabled="isFirstRow(cell.index) || isEditMode" v-on:click="moveUp(cell.index)">
               <v-icon name="regular/caret-square-up" scale="1.5"/>
             </b-button>
-            <b-button type="submit" variant="primary" :disabled="isLastRow(cell.index)" v-on:click="moveDown(cell.index)">
+            <b-button type="submit" variant="primary" :disabled="isLastRow(cell.index) || isEditMode" v-on:click="moveDown(cell.index)">
               <v-icon name="regular/caret-square-down" scale="1.5"/>
             </b-button>
           </b-button-group>
+          <div v-if="cell.index == indexToEdit">
+            <b-button-group class="mx-1">
+              <b-button type="submit" variant="success" v-on:click="confirmEditQuestion">
+                <v-icon name="regular/check-circle" scale="1.5"/>
+              </b-button>
+            </b-button-group>
+            <b-button-group class="mx-1">
+              <b-button type="submit" variant="danger" v-on:click="cancelEditQuestion">
+                <v-icon name="regular/times-circle" scale="1.5"/>
+              </b-button>
+            </b-button-group>
+          </div>
+          <div v-else>
+            <b-button-group class="mx-1">
+              <b-button type="submit" variant="danger" :disabled="isEditMode" v-on:click="removeQuestion(cell.item)">
+                <v-icon name="regular/trash-alt" scale="1.5"/>
+              </b-button>
+            </b-button-group>
+            <b-button-group class="mx-1">
+              <b-button type="submit" variant="warning" :disabled="isEditMode" v-on:click="editQuestion(cell.index)">
+                <v-icon name="regular/edit" scale="1.5"/>
+              </b-button>
+            </b-button-group>
+          </div>
         </b-button-toolbar>
       </template>
     </b-table>
@@ -60,14 +70,14 @@
         <b-form-input id="textInput"
                       class="mb-2 mr-sm-2 mb-sm-0"
                       type="text"
-                      v-model="question.text"
+                      v-model="newQuestion.text"
                       required
                       placeholder="Enter the question">
         </b-form-input>
         <b-form-input id="answerInput"
                       class="mb-2 mr-sm-2 mb-sm-0"
                       type="text"
-                      v-model="question.answer"
+                      v-model="newQuestion.answer"
                       required
                       placeholder="Enter the answer">
         </b-form-input>
@@ -88,31 +98,48 @@ export default {
       isNamed: false,
       indexToEdit: -1,
       questions: [],
-      question: {},
+      newQuestion: {},
+      updatedQuestion: {},
       fields: ["index", "text", "answer", "operations"]
+    }
+  },
+  computed: {
+    isEditMode() {
+      return this.indexToEdit > -1;
     }
   },
   methods: {
     nameQuiz() {
       this.isNamed = true;
     },
+    isFirstRow(index) {
+      return index == 0;
+    },
     isLastRow(index) {
       return index == this.questions.length-1;
     },
     addQuestion() {
       this.questions.push({
-        text: this.question.text,
-        answer: this.question.answer
+        text: this.newQuestion.text,
+        answer: this.newQuestion.answer
       });
-      this.question = {};
+      this.newQuestion = {};
     },
     editQuestion(index) {
       this.indexToEdit = index;
-      this.question = this.questions[index];
+      this.updatedQuestion = {
+        text: this.questions[index].text,
+        answer: this.questions[index].answer
+      }
     },
     cancelEditQuestion() {
       this.indexToEdit = -1;
-      this.question = {};
+      this.updatedQuestion = {};
+    },
+    confirmEditQuestion() {
+      this.questions[this.indexToEdit].text = this.updatedQuestion.text;
+      this.questions[this.indexToEdit].answer = this.updatedQuestion.answer;
+      this.indexToEdit = -1;
     },
     removeQuestion(question) {
       this.questions.splice(question, 1);
