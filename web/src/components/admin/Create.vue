@@ -86,6 +86,7 @@
         </b-button>
       </b-form>
     </div>
+    <b-button type="submit" variant="success" :disabled="! isReadyToSave">Save</b-button>
   </div>
 </template>
 
@@ -106,6 +107,9 @@ export default {
   computed: {
     isEditMode() {
       return this.indexToEdit > -1;
+    },
+    isReadyToSave() {
+      return this.isNamed && !this.isEditMode && this.questions.length > 0;
     }
   },
   methods: {
