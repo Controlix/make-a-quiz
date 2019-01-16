@@ -3,10 +3,16 @@ from flask_cors import cross_origin
 
 app = Flask(__name__)
 
-@app.route("/")
+class Quiz:
+    def __init__(self, name):
+        self.name = name
+        self.questions = []
+
+@app.route("/quiz")
 @cross_origin()
-def hello():
-    return "Hello World!"
+def quizes():
+    quizes = [Quiz("A New Quiz"), Quiz("The Return of the Chokotofs")]
+    return json.dumps(quizes, default=lambda o: o.__dict__)
 
 @app.route("/quiz", methods=['POST'])
 @cross_origin()
