@@ -86,11 +86,16 @@
         </b-button>
       </b-form>
     </div>
-    <b-button type="submit" variant="success" :disabled="! isReadyToSave">Save</b-button>
+    <b-button type="submit" variant="success" :disabled="! isReadyToSave" v-on:click="save">Save</b-button>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
+import VueResource from 'vue-resource'
+
+Vue.use(VueResource);
+
 export default {
   name: 'CreateQuiz',
   data() {
@@ -153,6 +158,14 @@ export default {
     },
     moveUp(index) {
       this.questions[index-1] = this.questions.splice(index, 1, this.questions[index-1])[0];
+    },
+    save() {
+      console.log('Saving...');
+      this.$http.post('http://localhost:5000/quiz', { name: this.name }).then(
+//      this.$http.get('http://localhost:5000').then(
+        resp => { console.log('Saved', resp) },
+        resp => { console.log('Something went wront', resp) }
+      );
     }
   }
 }
