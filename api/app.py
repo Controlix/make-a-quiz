@@ -8,10 +8,11 @@ class Quiz:
         self.name = name
         self.questions = []
 
+quizes = [Quiz("A New Quiz"), Quiz("The Return of the Chokotofs")]
+
 @app.route("/quiz")
 @cross_origin()
-def quizes():
-    quizes = [Quiz("A New Quiz"), Quiz("The Return of the Chokotofs")]
+def all_quizes():
     return json.dumps(quizes, default=lambda o: o.__dict__)
 
 @app.route("/quiz", methods=['POST'])
