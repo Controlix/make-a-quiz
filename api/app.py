@@ -4,10 +4,13 @@ import pymongo
 
 app = Flask(__name__)
 
+client = pymongo.MongoClient("mongodb://localhost:27017/", username="root", password="example", authSource="admin")
+db = client["make_a_quiz"]
+
 class Quiz:
-    def __init__(self, name):
+    def __init__(self, name, questions=[]):
         self.name = name
-        self.questions = []
+        self.questions = questions
 
     def add(self, question):
         self.questions.append(question)
@@ -19,15 +22,22 @@ class Question:
 
 toJSON = lambda o: o.__dict__
 
-quizes = [Quiz("A New Quiz"), Quiz("The Return of the Chokotofs")]
 q1 = Question("Where do pinguins live?", "On the south pole.")
-quizes[0].add(q1)
+quizes = [Quiz("A New Quiz", q1), Quiz("The Return of the Chokotofs")]
 
 
 @app.route("/quiz")
 @cross_origin()
 def all_quizes():
-    return json.dumps(quizes, default=toJSON)
+    result = []
+    print(db["quiz"].find())
+    for quiz in db["quiz"].find():
+        toAdd = Quiz(quiz['name'])
+        for question in quiz['questions']:
+            toAdd.add(Question(question['text'], question['answer']))
+        result.append(toAdd)
+
+    return json.dumps(result, default=toJSON)
 
 @app.route("/quiz", methods=['POST'])
 @cross_origin()
