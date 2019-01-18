@@ -163,10 +163,9 @@ export default {
     save() {
       console.log('Saving...');
       this.$http.post('http://localhost:5000/quiz', { name: this.name, questions: this.questions }).then(
-        resp => { console.log('Saved', resp) },
+        resp => { this.$router.push({name: 'home'}); },
         resp => { console.log('Something went wront', resp) }
       );
-      this.$router.go('home');
     }
   }
 }
