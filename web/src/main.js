@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import App from './App.vue'
+import ListQuizes from './components/admin/List'
 import CreateQuiz from './components/admin/Create'
 import Participate from './components/play/Participate'
 
@@ -16,8 +17,9 @@ Vue.component('v-icon', Icon)
 new Vue({
   router: new VueRouter({
     routes: [
-      { path: '/create', component: CreateQuiz },
-      { path: '/play', component: Participate }
+      { path: '/', component: ListQuizes, name: 'home' },
+      { path: '/create', component: CreateQuiz, name: 'new' },
+      { path: '/play', component: Participate, name: 'play' }
     ]
   }),
   render: h => h(App),

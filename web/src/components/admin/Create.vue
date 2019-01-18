@@ -127,12 +127,13 @@ export default {
     isLastRow(index) {
       return index == this.questions.length-1;
     },
-    addQuestion() {
+    addQuestion(e) {
       this.questions.push({
         text: this.newQuestion.text,
         answer: this.newQuestion.answer
       });
       this.newQuestion = {};
+      // e.preventDefault();
     },
     editQuestion(index) {
       this.indexToEdit = index;
@@ -161,11 +162,11 @@ export default {
     },
     save() {
       console.log('Saving...');
-      this.$http.post('http://localhost:5000/quiz', { name: this.name }).then(
-//      this.$http.get('http://localhost:5000').then(
+      this.$http.post('http://localhost:5000/quiz', { name: this.name, questions: this.questions }).then(
         resp => { console.log('Saved', resp) },
         resp => { console.log('Something went wront', resp) }
       );
+      this.$router.go('home');
     }
   }
 }
