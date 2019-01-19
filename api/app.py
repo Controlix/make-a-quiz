@@ -1,5 +1,6 @@
 from flask import Flask, json, request, jsonify
 from flask_cors import cross_origin
+from quiz import Quiz, Question
 import pymongo
 
 app = Flask(__name__)
@@ -8,24 +9,7 @@ client = pymongo.MongoClient("mongodb://localhost:27017/", username="root", pass
 db = client["make_a_quiz"]
 quizes = db[ "quiz"]
 
-class Quiz:
-    def __init__(self, name):
-        self.name = name
-        self.questions = []
 
-    def add(self, question):
-        self.questions.append(question)
-
-    def __repr__(self):
-        return str(self.__dict__)
-
-class Question:
-    def __init__(self, text, answer):
-        self.text = text
-        self.answer = answer
-
-    def __repr__(self):
-        return str(self.__dict__)
 
 toJSON = lambda o: o.__dict__
 
