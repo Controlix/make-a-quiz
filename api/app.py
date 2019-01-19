@@ -28,4 +28,7 @@ def new_quiz():
     quiz = quizFrom(request.get_json())
     quizes.insert_one(json.loads(json.dumps(quiz, default=toJSON)))
 
-    return json.dumps({ 'msg': 'Created' })
+    return app.response_class(
+        status=201,
+        headers=[('location', '/quiz/' + quiz.name)]
+        )
