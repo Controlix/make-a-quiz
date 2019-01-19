@@ -133,7 +133,6 @@ export default {
         answer: this.newQuestion.answer
       });
       this.newQuestion = {};
-      // e.preventDefault();
     },
     editQuestion(index) {
       this.indexToEdit = index;
