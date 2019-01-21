@@ -19,7 +19,7 @@ new Vue({
     routes: [
       { path: '/', component: ListQuizes, name: 'home' },
       { path: '/create', component: CreateQuiz, name: 'new' },
-      { path: '/play', component: Participate, name: 'play' }
+      { path: '/play/:name', component: Participate, name: 'play' }
     ]
   }),
   render: h => h(App),

@@ -22,6 +22,18 @@ def all_quizes():
         mimetype='application/json'
     )
 
+@app.route("/quiz/<name>")
+@cross_origin()
+def one_quiz(name):
+    result = quizFrom(quizes.find_one({ 'name': name }))
+
+    return app.response_class(
+        response=json.dumps(result, default=toJSON),
+        status=200,
+        mimetype='application/json'
+    )
+
+
 @app.route("/quiz", methods=['POST'])
 @cross_origin()
 def new_quiz():

@@ -43,7 +43,7 @@ export default {
       );
     },
     play(quiz) {
-
+      this.$router.push({name: 'play', params: { name: this.quizes[quiz].name }});
     }
   }
 }
