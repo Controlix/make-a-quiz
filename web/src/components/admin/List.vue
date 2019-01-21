@@ -1,9 +1,18 @@
 <template>
   <div>
     <h1>All Your Quizes</h1>
-    <b-table :items="quizes">
+    <b-table :items="quizes" :fields="fields">
       <template slot="questions" slot-scope="cell">
         {{cell.item.questions.length}}
+      </template>
+      <template slot="operations" slot-scope="cell">
+        <b-button-toolbar>
+          <b-button-group class="mx-1">
+            <b-button type="submit" variant="primary" v-on:click="play(cell.index)">
+              <v-icon name="regular/play-circle" scale="1.5"/>
+            </b-button>
+          </b-button-group>
+        </b-button-toolbar>
       </template>
     </b-table>
   </div>
@@ -19,7 +28,8 @@ export default {
   name: 'ListQuizes',
   data() {
     return {
-      quizes: []
+      quizes: [],
+      fields: ["name", "questions", "operations"]
     }
   },
   created() {
@@ -31,6 +41,9 @@ export default {
         resp => { this.quizes = resp.body },
         resp => { console.log('Something went wrong', resp) }
       );
+    },
+    play(quiz) {
+
     }
   }
 }
