@@ -20,6 +20,13 @@ class Question:
     def __repr__(self):
         return str(self.__dict__)
 
+class Questions:
+    def __init__(self, questions):
+        self.questions = questions
+
+    def __repr__(self):
+        return str(self.__dict__)
+
 def quizFrom(source):
     quiz = Quiz(source['name'])
     quiz.addAll(list(map(fromQuestion, source['questions'])))
@@ -27,3 +34,6 @@ def quizFrom(source):
 
 def fromQuestion(source):
     return Question(source['text'], source['answer'])
+
+def questionsFrom(source):
+    return Questions(list(map(lambda q: q['text'], source['questions'])))

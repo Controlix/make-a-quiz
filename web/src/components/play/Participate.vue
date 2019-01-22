@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Play this awesome quiz</h1>
-    <h2>{{quiz.name}}</h2>
+    <h2>{{name}}</h2>
   </div>
 </template>
 
@@ -15,12 +15,14 @@ export default {
   name: 'Participate',
   data() {
     return {
-      quiz: {}
+      name: '',
+      questions: []
     }
   },
   beforeRouteEnter(to, from, next) {
-    Vue.http.get('http://localhost:5000/quiz/' + to.params['name']).then(
-      (resp, err) => next(vm => vm.setData(resp, err))
+    const name = to.params['name'];
+    Vue.http.get('http://localhost:5000/quiz/' + name).then(
+      (resp, err) => next(vm => vm.setData(name, resp, err))
     );
   },
   beforeRouteUpdate(to, from, next) {
@@ -30,11 +32,12 @@ export default {
     );
   },
   methods: {
-    setData(resp, err) {
+    setData(name, resp, err) {
+      this.name = name;
       if (err) {
         console.log('Something went wrong', err);
       } else {
-        this.quiz = resp.body;
+        this.questions = resp.body;
         console.log(this.quiz);
       }
     }

@@ -1,7 +1,12 @@
 from flask import Flask, json, request, jsonify
 from flask_cors import cross_origin
-from quiz import Quiz, Question, quizFrom
+from quiz import Quiz, Question, quizFrom, questionsFrom
 import pymongo
+
+import secrets
+print(secrets.token_hex(32))
+
+
 
 app = Flask(__name__)
 
@@ -33,6 +38,16 @@ def one_quiz(name):
         mimetype='application/json'
     )
 
+@app.route("/quiz/<name>/questions")
+@cross_origin()
+def ask_quiz(name):
+    result = questionsFrom(quizes.find_one({ 'name': name }))
+
+    return app.response_class(
+        response=json.dumps(result, default=toJSON),
+        status=200,
+        mimetype='application/json'
+    )
 
 @app.route("/quiz", methods=['POST'])
 @cross_origin()
