@@ -3,7 +3,7 @@
     <h1>All Your Quizes</h1>
     <b-table :items="quizes" :fields="fields">
       <template slot="questions" slot-scope="cell">
-        {{cell.item.questions.length}}
+        {{cell.item.questions_and_answers.length}}
       </template>
       <template slot="operations" slot-scope="cell">
         <b-button-toolbar>

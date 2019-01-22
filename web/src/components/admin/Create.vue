@@ -16,7 +16,7 @@
           <input type="text" v-model="updatedQuestion.text" />
         </span>
         <span v-else>
-          {{cell.item.text}}
+          {{cell.item.question.text}}
         </span>
       </template>
       <template slot="answer" slot-scope="cell">
@@ -129,7 +129,9 @@ export default {
     },
     addQuestion(e) {
       this.questions.push({
-        text: this.newQuestion.text,
+        question: {
+          text: this.newQuestion.text
+        },
         answer: this.newQuestion.answer
       });
       this.newQuestion = {};
@@ -161,7 +163,7 @@ export default {
     },
     save() {
       console.log('Saving...');
-      this.$http.post('http://localhost:5000/quiz', { name: this.name, questions: this.questions }).then(
+      this.$http.post('http://localhost:5000/quiz', { name: this.name, questions_and_answers: this.questions }).then(
         resp => { this.$router.push({name: 'home'}); },
         resp => { console.log('Something went wront', resp) }
       );

@@ -1,42 +1,45 @@
 class Quiz:
     def __init__(self, name):
         self.name = name
-        self.questions = []
+        self.questions_and_answers = []
 
-    def add(self, question):
-        self.questions.append(question)
+    def add(self, question_and_answer):
+        self.questions_and_answers.append(question_and_answer)
 
-    def addAll(self, questions):
-        self.questions.extend(questions)
+    def addAll(self, questions_and_answers):
+        self.questions_and_answers.extend(questions_and_answers)
 
     @classmethod
     def fromDict(cls, dict):
         quiz = cls(dict['name'])
-        quiz.addAll(list(map(Question.fromDict, dict['questions'])))
+        quiz.addAll(list(map(QuestionAndAnswer.fromDict, dict['questions_and_answers'])))
         return quiz
+
+    def questions(self):
+        return list(map(lambda qa: qa.question, self.questions_and_answers))
+
+    def __repr__(self):
+        return str(self.__dict__)
+
+class QuestionAndAnswer:
+    def __init__(self, question, answer):
+        self.question = question
+        self.answer = answer
+
+    @classmethod
+    def fromDict(cls, dict):
+        return cls(Question.fromDict(dict['question']), dict['answer'])
 
     def __repr__(self):
         return str(self.__dict__)
 
 class Question:
-    def __init__(self, text, answer):
+    def __init__(self, text):
         self.text = text
-        self.answer = answer
 
     @classmethod
     def fromDict(cls, dict):
-        return Question(dict['text'], dict['answer'])
-
-    def __repr__(self):
-        return str(self.__dict__)
-
-class Questions:
-    def __init__(self, questions):
-        self.questions = questions
-
-    @classmethod
-    def fromQuizDict(cls, dict):
-        return cls(list(map(lambda q: q['text'], dict['questions'])))
+        return cls(dict['text'])
 
     def __repr__(self):
         return str(self.__dict__)

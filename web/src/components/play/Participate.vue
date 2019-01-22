@@ -2,6 +2,9 @@
   <div>
     <h1>Play this awesome quiz</h1>
     <h2>{{name}}</h2>
+    <b-table :items="questions">
+
+    </b-table>
   </div>
 </template>
 
@@ -21,7 +24,7 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     const name = to.params['name'];
-    Vue.http.get('http://localhost:5000/quiz/' + name).then(
+    Vue.http.get('http://localhost:5000/quiz/' + name + '/questions').then(
       (resp, err) => next(vm => vm.setData(name, resp, err))
     );
   },
@@ -37,8 +40,9 @@ export default {
       if (err) {
         console.log('Something went wrong', err);
       } else {
+        console.log(resp);
         this.questions = resp.body;
-        console.log(this.quiz);
+        console.log(this.questions);
       }
     }
   }

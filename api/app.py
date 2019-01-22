@@ -1,6 +1,6 @@
 from flask import Flask, json, request, jsonify
 from flask_cors import cross_origin
-from quiz import Quiz, Question, Questions
+from quiz import Quiz, Question
 import pymongo
 
 app = Flask(__name__)
@@ -36,7 +36,7 @@ def one_quiz(name):
 @app.route("/quiz/<name>/questions")
 @cross_origin()
 def ask_quiz(name):
-    result = Questions.fromQuizDict(quizes.find_one({ 'name': name }))
+    result = Quiz.fromDict(quizes.find_one({ 'name': name })).questions()
 
     return app.response_class(
         response=json.dumps(result, default=toJSON),
