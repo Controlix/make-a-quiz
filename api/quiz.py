@@ -9,6 +9,12 @@ class Quiz:
     def addAll(self, questions):
         self.questions.extend(questions)
 
+    @classmethod
+    def fromDict(cls, dict):
+        quiz = cls(dict['name'])
+        quiz.addAll(list(map(Question.fromDict, dict['questions'])))
+        return quiz
+
     def __repr__(self):
         return str(self.__dict__)
 
@@ -17,6 +23,10 @@ class Question:
         self.text = text
         self.answer = answer
 
+    @classmethod
+    def fromDict(cls, dict):
+        return Question(dict['text'], dict['answer'])
+
     def __repr__(self):
         return str(self.__dict__)
 
@@ -24,16 +34,9 @@ class Questions:
     def __init__(self, questions):
         self.questions = questions
 
+    @classmethod
+    def fromQuizDict(cls, dict):
+        return cls(list(map(lambda q: q['text'], dict['questions'])))
+
     def __repr__(self):
         return str(self.__dict__)
-
-def quizFrom(source):
-    quiz = Quiz(source['name'])
-    quiz.addAll(list(map(fromQuestion, source['questions'])))
-    return quiz
-
-def fromQuestion(source):
-    return Question(source['text'], source['answer'])
-
-def questionsFrom(source):
-    return Questions(list(map(lambda q: q['text'], source['questions'])))
