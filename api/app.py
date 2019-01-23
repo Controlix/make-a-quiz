@@ -1,6 +1,7 @@
 from flask import Flask, json, request, jsonify
 from flask_cors import cross_origin
 from flask_jwt_extended import create_access_token, JWTManager
+from flask_bcrypt import Bcrypt
 from quiz import Quiz, Question
 from user import User
 import pymongo
@@ -9,6 +10,7 @@ app = Flask(__name__)
 
 app.config['JWT_SECRET_KEY'] = 'super-secret'
 jwt = JWTManager(app)
+bcrypt = Bcrypt(app)
 
 client = pymongo.MongoClient("mongodb://localhost:27017/", username="root", password="example", authSource="admin")
 db = client["make_a_quiz"]
@@ -74,8 +76,12 @@ def login():
     if not password:
         return jsonify({"msg": "Missing password parameter"}), 400
 
-    user = users.find_one({ 'username': username, 'password': password })
+    user = users.find_one({ 'username': username })
     if not user:
+        return jsonify({"msg": "Bad username or password"}), 401
+
+    pwd = User.fromDict(user).password
+    if not bcrypt.check_password_hash(pwd, password):
         return jsonify({"msg": "Bad username or password"}), 401
 
     access_token = create_access_token(identity=username)
@@ -98,7 +104,8 @@ def new_user():
     if user:
         return jsonify({"msg": "Bad username or password"}), 400
 
-    user = User(username, password)
+    pwd = bcrypt.generate_password_hash(password).decode("utf-8")
+    user = User(username, pwd)
     users.insert_one(json.loads(json.dumps(user, default=toJSON)))
 
     return app.response_class(
