@@ -23,11 +23,7 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import VueResource from 'vue-resource'
 import {mapMutations} from 'vuex'
-
-Vue.use(VueResource);
 
 export default {
   name: 'UserProfile',

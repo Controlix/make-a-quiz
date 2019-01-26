@@ -19,11 +19,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import VueResource from 'vue-resource'
-import store from '../Profile'
-
-
 export default {
   name: 'ListQuizes',
   data() {

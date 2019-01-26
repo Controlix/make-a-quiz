@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import BootstrapVue from 'bootstrap-vue'
+import Icon from 'vue-awesome/components/Icon'
 
 import App from './App.vue'
 import ListQuizes from './components/admin/List'
@@ -8,13 +10,15 @@ import Participate from './components/play/Participate'
 
 import {store} from './store'
 
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vue-awesome/icons'
-import Icon from 'vue-awesome/components/Icon'
 
 Vue.config.productionTip = false
 
 Vue.use(VueRouter)
 Vue.component('v-icon', Icon)
+Vue.use(BootstrapVue)
 
 new Vue({
   router: new VueRouter({
