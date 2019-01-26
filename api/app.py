@@ -1,6 +1,6 @@
 from flask import Flask, json, request, jsonify
 from flask_cors import cross_origin
-from flask_jwt_extended import create_access_token, JWTManager
+from flask_jwt_extended import create_access_token, JWTManager, jwt_required
 from flask_bcrypt import Bcrypt
 from quiz import Quiz, Question
 from user import User
@@ -21,6 +21,7 @@ toJSON = lambda o: o.__dict__
 
 @app.route("/quiz")
 @cross_origin()
+@jwt_required
 def all_quizes():
     result = list(map(Quiz.fromDict, quizes.find()))
 

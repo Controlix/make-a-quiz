@@ -21,8 +21,8 @@
 <script>
 import Vue from 'vue'
 import VueResource from 'vue-resource'
+import store from '../Profile'
 
-Vue.use(VueResource);
 
 export default {
   name: 'ListQuizes',

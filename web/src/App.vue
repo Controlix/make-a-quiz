@@ -12,6 +12,9 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
+    <br />
+    <user-profile></user-profile>
+    <br />
     <router-view></router-view>
   </div>
 </template>
@@ -20,12 +23,16 @@
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 
+import UserProfile from './components/Profile'
+
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 Vue.use(BootstrapVue)
 
 export default {
-  name: 'app'
+  name: 'app',
+  components: { UserProfile }
 }
 </script>
 
