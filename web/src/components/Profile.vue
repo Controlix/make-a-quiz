@@ -38,7 +38,7 @@ export default {
     login() {
       console.log("Login with " + this.username + " and " + this.password);
       this.$http.post('http://localhost:5000/login', { username: this.username, password: this.password }).then(
-        resp => { this.authenticate(resp.body['access_token']) },
+        resp => { this.authenticate(resp.body) },
         resp => { console.log('Something went wront', resp) }
       );
     }

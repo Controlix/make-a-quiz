@@ -1,14 +1,16 @@
 from flask import Flask, json, request, jsonify
 from flask_cors import cross_origin
-from flask_jwt_extended import create_access_token, JWTManager, jwt_required
+from flask_jwt_extended import create_access_token, create_refresh_token, JWTManager, jwt_required
 from flask_bcrypt import Bcrypt
 from quiz import Quiz, Question
 from user import User
+from datetime import timedelta
 import pymongo
 
 app = Flask(__name__)
 
 app.config['JWT_SECRET_KEY'] = 'super-secret'
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=1)
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
 
@@ -86,7 +88,8 @@ def login():
         return jsonify({"msg": "Bad username or password"}), 401
 
     access_token = create_access_token(identity=username)
-    return jsonify(access_token=access_token), 200
+    refresh_token = create_refresh_token(identity=username)
+    return jsonify(access_token=access_token, refresh_token=refresh_token), 200
 
 @app.route("/register", methods=['POST'])
 @cross_origin()
