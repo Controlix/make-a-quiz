@@ -7,23 +7,35 @@
       <b-dropdown-item v-b-modal.login-form v-if="!isLoggedIn">Login</b-dropdown-item>
       <b-dropdown-item v-on:click="do_logout" v-else>Logoff</b-dropdown-item>
     </b-nav-item-dropdown>
-    <b-modal id="login-form" title="Login" v-on:ok="do_login" v-on:cancel="clear_login_form">
-      <label class="mr-sm-2" for="textInput">Username:</label>
-      <b-form-input id="username"
-                    class="mb-2 mr-sm-2 mb-sm-0"
-                    type="text"
-                    v-model="username"
-                    required
-                    placeholder="Enter your username">
-      </b-form-input>
-      <label class="mr-sm-2" for="textInput">Password:</label>
-      <b-form-input id="password"
-                    class="mb-2 mr-sm-2 mb-sm-0"
-                    type="password"
-                    v-model="password"
-                    required
-                    placeholder="Enter your password">
-      </b-form-input>
+    <b-modal id="login-form" centered title="Login" v-on:ok="do_login" v-on:cancel="clear_login_form">
+      <b-container fluid>
+        <b-row class="my-1">
+          <b-col sm="1"><v-icon name="user" scale="1.5"/></b-col>
+          <b-col sm="11">
+            <b-form-input id="username"
+                          class="mb-2 mr-sm-2 mb-sm-0"
+                          type="text"
+                          v-model="username"
+                          required
+                          placeholder="Enter your username">
+            </b-form-input>
+          </b-col>
+        </b-row>
+      </b-container>
+      <b-container fluid>
+        <b-row class="my-1">
+          <b-col sm="1"><v-icon name="unlock" scale="1.5"/></b-col>
+          <b-col sm="11">
+            <b-form-input id="password"
+                          class="mb-2 mr-sm-2 mb-sm-0"
+                          type="password"
+                          v-model="password"
+                          required
+                          placeholder="Enter your password">
+            </b-form-input>
+          </b-col>
+        </b-row>
+      </b-container>
     </b-modal>
   </div>
 </template>
@@ -67,5 +79,5 @@ export default {
 }
 </script>
 
-<style>
-</<style>s
+<style scoped>
+</<style>
