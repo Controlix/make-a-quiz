@@ -6,25 +6,29 @@
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
       <b-navbar-brand to="/">Make a Quiz</b-navbar-brand>
       <b-collapse is-nav id="nav_collapse">
-        <b-navbar-nav>
+        <b-navbar-nav v-if="isLoggedIn">
           <b-nav-item to='/create'>Create a new quiz</b-nav-item>
           <b-nav-item to='/play'>Play a quiz</b-nav-item>
         </b-navbar-nav>
+        <b-navbar-nav right class="ml-auto">
+          <user-profile></user-profile>
+        </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <br />
-    <user-profile></user-profile>
-    <br />
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 import UserProfile from './components/Profile'
+import {mapGetters} from 'vuex'
 
 export default {
   name: 'app',
-  components: { UserProfile }
+  components: { UserProfile },
+  computed: {
+    ...mapGetters(['isLoggedIn'])
+  }
 }
 </script>
 

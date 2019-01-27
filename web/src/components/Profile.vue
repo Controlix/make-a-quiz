@@ -16,7 +16,8 @@
                     required
                     placeholder="Enter your password">
       </b-form-input>
-      <b-button type="submit" variant="success">
+      <b-button type="submit">
+        Login
       </b-button>
     </b-form>
     <b-button v-else v-on:click="do_logout">
