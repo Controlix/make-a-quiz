@@ -1,6 +1,13 @@
 <template>
   <div>
-    <b-form @submit="do_login" inline v-if="!isLoggedIn">
+    <b-nav-item-dropdown right no-caret>
+      <template slot="button-content">
+        <v-icon name="regular/user-circle" scale="1.5"/>
+      </template>
+      <b-dropdown-item v-b-modal.login-form v-if="!isLoggedIn">Login</b-dropdown-item>
+      <b-dropdown-item v-on:click="do_logout" v-else>Logoff</b-dropdown-item>
+    </b-nav-item-dropdown>
+    <b-modal id="login-form" title="Login" v-on:ok="do_login" v-on:cancel="clear_login_form">
       <label class="mr-sm-2" for="textInput">Username:</label>
       <b-form-input id="username"
                     class="mb-2 mr-sm-2 mb-sm-0"
@@ -9,6 +16,7 @@
                     required
                     placeholder="Enter your username">
       </b-form-input>
+      <label class="mr-sm-2" for="textInput">Password:</label>
       <b-form-input id="password"
                     class="mb-2 mr-sm-2 mb-sm-0"
                     type="password"
@@ -16,13 +24,7 @@
                     required
                     placeholder="Enter your password">
       </b-form-input>
-      <b-button type="submit">
-        Login
-      </b-button>
-    </b-form>
-    <b-button v-else v-on:click="do_logout">
-      Logout
-    </b-button>
+    </b-modal>
   </div>
 </template>
 
@@ -43,7 +45,10 @@ export default {
   methods: {
     ...mapMutations(['authenticate', 'login', 'logout']),
     do_login() {
-      this.$http.post('http://localhost:5000/login', { username: this.username, password: this.password }).then(
+      const username = this.username;
+      const password = this.password;
+      this.clear_login_form();
+      this.$http.post('http://localhost:5000/login', { username: username, password: password }).then(
         resp => {
           this.login();
           this.authenticate(resp.body) },
@@ -53,6 +58,10 @@ export default {
     do_logout() {
       this.$http.delete('http://localhost:5000/logout');
       this.logout();
+    },
+    clear_login_form() {
+      this.username = '';
+      this.password = '';
     }
   }
 }
