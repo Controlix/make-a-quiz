@@ -1,5 +1,5 @@
 from flask import Flask, json, request, jsonify
-from flask_cors import cross_origin
+from flask_cors import cross_origin, CORS
 from flask_jwt_extended import create_access_token, create_refresh_token, JWTManager, jwt_required
 from flask_bcrypt import Bcrypt
 from quiz import Quiz, Question
@@ -13,6 +13,7 @@ app.config['JWT_SECRET_KEY'] = 'super-secret'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=1)
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
+CORS(app)
 
 client = pymongo.MongoClient("mongodb://localhost:27017/", username="root", password="example", authSource="admin")
 db = client["make_a_quiz"]
@@ -22,7 +23,6 @@ users = db["user"]
 toJSON = lambda o: o.__dict__
 
 @app.route("/quiz")
-@cross_origin()
 @jwt_required
 def all_quizes():
     result = list(map(Quiz.fromDict, quizes.find()))
@@ -34,7 +34,6 @@ def all_quizes():
     )
 
 @app.route("/quiz/<name>")
-@cross_origin()
 def one_quiz(name):
     result = Quiz.fromDict(quizes.find_one({ 'name': name }))
 
@@ -45,7 +44,6 @@ def one_quiz(name):
     )
 
 @app.route("/quiz/<name>/questions")
-@cross_origin()
 def ask_quiz(name):
     result = Quiz.fromDict(quizes.find_one({ 'name': name })).questions()
 
@@ -56,7 +54,6 @@ def ask_quiz(name):
     )
 
 @app.route("/quiz", methods=['POST'])
-@cross_origin()
 def new_quiz():
     quiz = Quiz.fromDict(request.get_json())
     quizes.insert_one(json.loads(json.dumps(quiz, default=toJSON)))
@@ -67,7 +64,6 @@ def new_quiz():
         )
 
 @app.route("/login", methods=['POST'])
-@cross_origin()
 def login():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
@@ -92,7 +88,6 @@ def login():
     return jsonify(access_token=access_token, refresh_token=refresh_token), 200
 
 @app.route("/register", methods=['POST'])
-@cross_origin()
 def new_user():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
