@@ -157,7 +157,6 @@ export default {
       this.questions[index-1] = this.questions.splice(index, 1, this.questions[index-1])[0];
     },
     save() {
-      console.log('Saving...');
       this.$http.post('http://localhost:5000/quiz', { name: this.name, questions_and_answers: this.questions }).then(
         resp => { this.$router.push({name: 'home'}); },
         resp => { console.log('Something went wront', resp) }

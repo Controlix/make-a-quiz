@@ -16,12 +16,10 @@ export const store = new Vuex.Store({
     status: 'UNKNOWN'
   },
   getters: {
-    access_token: state => state.access_token,
-    refresh_token: state => state.refresh_token,
     isLoggedIn: state => state.status === 'LOGGED_IN'
   },
   mutations: {
-    authenticate(state, tokens) {
+    login(state, tokens) {
       state.access_token = tokens.access_token;
       state.refresh_token = tokens.refresh_token;
       state.status = 'LOGGED_IN';
@@ -32,9 +30,6 @@ export const store = new Vuex.Store({
     },
     start_refresh(state) {
       state.status = 'REFRESHING';
-    },
-    login(state) {
-      state.status = 'LOGGIN_IN'
     },
     logout(state) {
       state.access_token = '';

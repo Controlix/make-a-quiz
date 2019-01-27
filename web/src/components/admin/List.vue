@@ -34,7 +34,7 @@ export default {
     loadQuizes() {
       this.$http.get('http://localhost:5000/quiz').then(
         resp => { this.quizes = resp.body },
-        resp => { console.log('Something went wrong', resp) }
+        () => { this.quizes = [] }
       );
     },
     play(quiz) {
