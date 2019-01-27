@@ -1,6 +1,6 @@
 from flask import Flask, json, request, jsonify
 from flask_cors import cross_origin, CORS
-from flask_jwt_extended import create_access_token, create_refresh_token, JWTManager, jwt_required
+from flask_jwt_extended import create_access_token, create_refresh_token, JWTManager, jwt_required, jwt_refresh_token_required, get_jwt_identity
 from flask_bcrypt import Bcrypt
 from quiz import Quiz, Question
 from user import User
@@ -86,6 +86,15 @@ def login():
     access_token = create_access_token(identity=username)
     refresh_token = create_refresh_token(identity=username)
     return jsonify(access_token=access_token, refresh_token=refresh_token), 200
+
+
+@app.route("/refresh")
+@jwt_refresh_token_required
+def refresh():
+    username = get_jwt_identity()
+    print("Refresh token for " + username)
+    access_token = create_access_token(identity=username)
+    return jsonify(access_token=access_token), 200
 
 @app.route("/register", methods=['POST'])
 def new_user():
