@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import jwt from 'jsonwebtoken'
 import VuexPersistence from 'vuex-persist'
 
 Vue.use(Vuex)
@@ -33,6 +32,9 @@ export const store = new Vuex.Store({
     start_refresh(state) {
       state.status = 'REFRESHING';
     },
+    login(state) {
+      state.status = 'LOGGIN_IN'
+    },
     logout(state) {
       state.status = 'UNKNOWN';
     }
@@ -48,14 +50,13 @@ Vue.http.interceptors.push((req, next) => {
   if (store.state.status === 'REFRESHING') {
     req.headers.set('Authorization', 'Bearer ' + store.state.refresh_token);
   }
-  next((resp, err) => {
+  next((resp) => {
     if (resp.status === 401) {
       if (store.state.status === 'LOGGED_IN' && resp.body.msg === 'Token has expired') {
         store.commit('start_refresh');
         return Promise.resolve(
           Vue.http.get('http://localhost:5000/refresh').then(
-            resp => { store.commit('refresh', resp.body) },
-            resp => {  console.log('Something went wrong', resp) }
+            resp => { store.commit('refresh', resp.body) }
           ).then(_ => Vue.http(req)));
       } else {
         store.commit('logout');

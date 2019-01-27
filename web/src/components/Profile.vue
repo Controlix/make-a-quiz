@@ -34,12 +34,13 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['authenticate']),
+    ...mapMutations(['authenticate', 'login', 'logout']),
     login() {
-      console.log("Login with " + this.username + " and " + this.password);
       this.$http.post('http://localhost:5000/login', { username: this.username, password: this.password }).then(
-        resp => { this.authenticate(resp.body) },
-        resp => { console.log('Something went wront', resp) }
+        resp => {
+          this.login();
+          this.authenticate(resp.body) },
+        _ => this.logout()
       );
     }
   }

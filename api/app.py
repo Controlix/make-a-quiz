@@ -34,6 +34,7 @@ def all_quizes():
     )
 
 @app.route("/quiz/<name>")
+@jwt_required
 def one_quiz(name):
     result = Quiz.fromDict(quizes.find_one({ 'name': name }))
 
@@ -44,6 +45,7 @@ def one_quiz(name):
     )
 
 @app.route("/quiz/<name>/questions")
+@jwt_required
 def ask_quiz(name):
     result = Quiz.fromDict(quizes.find_one({ 'name': name })).questions()
 
@@ -54,6 +56,7 @@ def ask_quiz(name):
     )
 
 @app.route("/quiz", methods=['POST'])
+@jwt_required
 def new_quiz():
     quiz = Quiz.fromDict(request.get_json())
     quizes.insert_one(json.loads(json.dumps(quiz, default=toJSON)))
@@ -92,7 +95,6 @@ def login():
 @jwt_refresh_token_required
 def refresh():
     username = get_jwt_identity()
-    print("Refresh token for " + username)
     access_token = create_access_token(identity=username)
     return jsonify(access_token=access_token), 200
 
