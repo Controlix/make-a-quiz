@@ -55,7 +55,7 @@ Vue.http.interceptors.push((req, next) => {
         return Promise.resolve(
           Vue.http.get('http://localhost:5000/refresh').then(
             resp => { store.commit('refresh', resp.body) },
-            resp => {  console.log('Something went wront', resp) }
+            resp => {  console.log('Something went wrong', resp) }
           ).then(_ => Vue.http(req)));
       } else {
         store.commit('logout');
