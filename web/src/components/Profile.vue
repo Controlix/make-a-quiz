@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-form @submit="login" inline>
+    <b-form @submit="do_login" inline v-if="!isLoggedIn">
       <label class="mr-sm-2" for="textInput">Username:</label>
       <b-form-input id="username"
                     class="mb-2 mr-sm-2 mb-sm-0"
@@ -19,11 +19,14 @@
       <b-button type="submit" variant="success">
       </b-button>
     </b-form>
+    <b-button v-else v-on:click="do_logout">
+      Logout
+    </b-button>
   </div>
 </template>
 
 <script>
-import {mapMutations} from 'vuex'
+import {mapMutations, mapGetters} from 'vuex'
 
 export default {
   name: 'UserProfile',
@@ -33,15 +36,22 @@ export default {
       password: ""
     }
   },
+  computed: {
+    ...mapGetters(['isLoggedIn'])
+  },
   methods: {
     ...mapMutations(['authenticate', 'login', 'logout']),
-    login() {
+    do_login() {
       this.$http.post('http://localhost:5000/login', { username: this.username, password: this.password }).then(
         resp => {
           this.login();
           this.authenticate(resp.body) },
-        _ => this.logout()
+        () => this.logout()
       );
+    },
+    do_logout() {
+      this.$http.delete('http://localhost:5000/logout');
+      this.logout();
     }
   }
 }

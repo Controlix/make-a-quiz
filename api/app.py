@@ -1,6 +1,6 @@
 from flask import Flask, json, request, jsonify
 from flask_cors import cross_origin, CORS
-from flask_jwt_extended import create_access_token, create_refresh_token, JWTManager, jwt_required, jwt_refresh_token_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, create_refresh_token, JWTManager, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt
 from flask_bcrypt import Bcrypt
 from quiz import Quiz, Question
 from user import User
@@ -10,7 +10,9 @@ import pymongo
 app = Flask(__name__)
 
 app.config['JWT_SECRET_KEY'] = 'super-secret'
+app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=1)
+
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
 CORS(app)
@@ -21,6 +23,13 @@ quizes = db[ "quiz"]
 users = db["user"]
 
 toJSON = lambda o: o.__dict__
+
+blacklist = set()
+
+@jwt.token_in_blacklist_loader
+def check_if_token_in_blacklist(decrypted_token):
+    jti = decrypted_token['jti']
+    return jti in blacklist
 
 @app.route("/quiz")
 @jwt_required
@@ -90,6 +99,12 @@ def login():
     refresh_token = create_refresh_token(identity=username)
     return jsonify(access_token=access_token, refresh_token=refresh_token), 200
 
+@app.route("/logout", methods=['DELETE'])
+@jwt_required
+def logout():
+    jti = get_raw_jwt()['jti']
+    blacklist.add(jti)
+    return jsonify({"msg": "Successfully logged out"}), 200
 
 @app.route("/refresh")
 @jwt_refresh_token_required

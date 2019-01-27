@@ -17,7 +17,8 @@ export const store = new Vuex.Store({
   },
   getters: {
     access_token: state => state.access_token,
-    refresh_token: state => state.refresh_token
+    refresh_token: state => state.refresh_token,
+    isLoggedIn: state => state.status === 'LOGGED_IN'
   },
   mutations: {
     authenticate(state, tokens) {
@@ -36,6 +37,8 @@ export const store = new Vuex.Store({
       state.status = 'LOGGIN_IN'
     },
     logout(state) {
+      state.access_token = '';
+      state.refresh_token = '';
       state.status = 'UNKNOWN';
     }
   },
@@ -57,7 +60,7 @@ Vue.http.interceptors.push((req, next) => {
         return Promise.resolve(
           Vue.http.get('http://localhost:5000/refresh').then(
             resp => { store.commit('refresh', resp.body) }
-          ).then(_ => Vue.http(req)));
+          ).then(() => Vue.http(req)));
       } else {
         store.commit('logout');
       }
