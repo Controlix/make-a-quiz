@@ -1,7 +1,7 @@
 import QuizApi from '@/quiz-service'
 
 describe('The Quiz API', () => {
-  describe('all quizes', () => {
+  describe('get all quizes', () => {
     beforeEach(() => {
       const interaction = {
         uponReceiving: 'get all quizes',
@@ -48,5 +48,46 @@ describe('The Quiz API', () => {
         })
         .then(done);
     })
+  });
+
+  describe('get one quiz', () => {
+    beforeEach(() => {
+      const interaction = {
+        uponReceiving: 'get one quis',
+        withRequest: {
+          method: 'GET',
+          path: '/quiz/This%20is%20my%20quiz',
+          headers: {
+            Accept: 'application/json, text/plain, */*'
+          }
+        },
+        willRespondWith: {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: {
+            name: "This is my quiz",
+            questions_and_answers: [{
+              answer: "On the south pole",
+              question: {
+                text: "Where do pinguins live?"
+              }
+            }]
+          }
+        }
+      };
+      return provider.addInteraction(interaction);
+    });
+
+    it('should return one quiz', done => {
+      QuizApi.quiz('This is my quiz')
+        .then(response => {
+          expect(response).toMatchObject({
+            "name": "This is my quiz"
+          });
+        })
+        .then(done);
+    });
   })
 })
