@@ -8,7 +8,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
-    "pactTest": "vue-cli-service test:unit --runInBand --setupFiles ./tests/pactSetup.js --setupTestFrameworkScriptFile ./tests/pactTestWrapper.js"
+    "test:pact": "vue-cli-service test:unit --runInBand --testMatch \"**/tests/pact/**/*.test.pact.js\" --setupFiles ./tests/pactSetup.js --setupTestFrameworkScriptFile ./tests/pactTestWrapper.js",
+    "publish:pact": "node ./tests/publish.js"
 
   },
   "dependencies": {
